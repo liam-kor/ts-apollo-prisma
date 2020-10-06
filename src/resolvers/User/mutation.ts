@@ -1,5 +1,6 @@
 import { intArg, mutationField, stringArg } from '@nexus/schema';
 import { compare, hash } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 
 export const signUp = mutationField('signUp', {
@@ -48,11 +49,9 @@ export const signIn = mutationField('signIn', {
         if (!passwordValid) {
             throw new Error('Invalid password')
         }
-
-        console.log(ctx.appSecret)
-
+        
         return {
-            token: 'test token',
+            token: sign({ userId: user.id }, 'lunasoft'),
             user
         }
     }

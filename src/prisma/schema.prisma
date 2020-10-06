@@ -21,6 +21,8 @@ model User {
   email              String               @unique
   password           String
   nickname           String?
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now())
   userToPermissions   UserToPermission[]
 
   @@map(name: "user")
@@ -30,6 +32,8 @@ model Permission {
   id                 Int                  @id @default(autoincrement())
   name               String
   code               String               @unique
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now())
   userToPermissions   UserToPermission[]
 
   @@map(name: "permissions")
@@ -38,7 +42,7 @@ model Permission {
 model UserToPermission {
   user_id       Int
   permission_id Int
-  created_at    DateTime?
+  created_at    DateTime?   @default(now())
   Permission    Permission  @relation(fields: [permission_id], references: [id])
   User          User        @relation(fields: [user_id], references: [id])
 

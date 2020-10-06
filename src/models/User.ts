@@ -7,6 +7,8 @@ export const User = objectType({
         t.model.email()
         t.model.password()
         t.model.nickname()
+        t.model.created_at()
+        t.model.updated_at()
         t.list.field('permissions', {
             type: 'Permission',
             resolve: async (_root, args, ctx) => {

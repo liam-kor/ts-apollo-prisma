@@ -7,6 +7,8 @@ type AuthPayload {
   user: User!
 }
 
+scalar DateTime
+
 type Mutation {
   createDraft(body: String!, title: String!): Post!
   publish(draftId: Int!): Post!
@@ -35,9 +37,11 @@ type Query {
 }
 
 type User {
+  created_at: DateTime!
   email: String!
   id: Int!
   nickname: String
   password: String!
   permissions: [Permission!]!
+  updated_at: DateTime!
 }
