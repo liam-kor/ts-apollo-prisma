@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  body      String
+  published Boolean
+
+  @@map(name: "post")
+}
+
+model User {
+  id                 Int                  @id @default(autoincrement())
+  email              String               @unique
+  password           String
+  nickname           String?
+  userToPermissions   UserToPermission[]
+
+  @@map(name: "user")
+}
+
+model Permission {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  code               String               @unique
+  userToPermissions   UserToPermission[]
+
+  @@map(name: "permissions")
+}
+
+model UserToPermission {
+  user_id       Int
+  permission_id Int
+  created_at    DateTime?
+  Permission    Permission  @relation(fields: [permission_id], references: [id])
+  User          User        @relation(fields: [user_id], references: [id])
+
+  @@map(name: "_user_to_permission")
+  @@id([user_id, permission_id])
+}
