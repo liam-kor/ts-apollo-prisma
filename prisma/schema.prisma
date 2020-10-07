@@ -13,7 +13,29 @@ model Post {
   body      String
   published Boolean
 
-  @@map(name: "post")
+  @@map(name: "posts")
+}
+
+model Partner {
+  id                 Int                  @id @default(autoincrement())
+  code            String?
+  name               String?
+  users              User[]
+  malls              Mall[]
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now())
+
+  @@map(name: "partners")
+}
+
+model Mall {
+  id                 Int                  @id @default(autoincrement())
+  mall_no            Int
+  mall_name          String
+  partner            Partner             @relation(fields: [partner_id], references: [id])
+  partner_id         Int
+
+  @@map(name: "malls")
 }
 
 model User {
@@ -21,11 +43,13 @@ model User {
   email              String               @unique
   password           String
   nickname           String?
+  partner            Partner              @relation(fields: [partner_id], references: [id])
+  partner_id         Int
   created_at         DateTime             @default(now())
   updated_at         DateTime             @default(now())
   userToPermissions   UserToPermission[]
 
-  @@map(name: "user")
+  @@map(name: "users")
 }
 
 model Permission {

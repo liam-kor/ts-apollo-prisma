@@ -1,4 +1,4 @@
-import { intArg, mutationField, stringArg } from '@nexus/schema';
+import { inputObjectType, intArg, mutationField, stringArg } from '@nexus/schema';
 import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
@@ -49,10 +49,55 @@ export const signIn = mutationField('signIn', {
         if (!passwordValid) {
             throw new Error('Invalid password')
         }
-        
+
         return {
             token: sign({ userId: user.id }, 'lunasoft'),
             user
         }
     }
 })
+
+export const UserUpdateInputType = inputObjectType({
+    name: 'UserUpdateInput',
+    definition(t) {
+        t.string('email', {
+            required: true,
+        });
+        t.string('password', {
+            required: true
+        });
+        t.string('nickname');
+    }
+})
+
+// export const updateUser = mutationField('updateUser', {
+//     type: 'User',
+//     args: {
+//         id: stringArg({ nullable: false, required: true }),
+//         email: stringArg({ required: false }),
+//         password: stringArg({ required: false }),
+//         nickname: stringArg({ required: false })
+//     },
+//     resolve: async (_root, { email, password }, ctx) => {
+//         const user = await ctx.prisma.user.findOne({
+//             where: {
+//                 email: email
+//             }
+//         })
+
+//         if (!user) {
+//             throw new Error('No User exists')
+//         }
+
+//         const passwordValid = await compare(password, user.password)
+
+//         if (!passwordValid) {
+//             throw new Error('Invalid password')
+//         }
+
+//         return {
+//             token: sign({ userId: user.id }, 'lunasoft'),
+//             user
+//         }
+//     }
+// })

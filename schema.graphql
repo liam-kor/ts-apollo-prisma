@@ -9,11 +9,32 @@ type AuthPayload {
 
 scalar DateTime
 
+type Mall {
+  id: Int!
+  mall_name: String!
+  mall_no: Int!
+  partner: Partner!
+}
+
+input MallWhereUniqueInput {
+  id: Int
+}
+
 type Mutation {
   createDraft(body: String!, title: String!): Post!
   publish(draftId: Int!): Post!
   signIn(email: String!, password: String!): AuthPayload!
   signUp(email: String!, password: String!): User!
+}
+
+type Partner {
+  code: String
+  created_at: DateTime!
+  id: Int!
+  malls(after: MallWhereUniqueInput, before: MallWhereUniqueInput, first: Int, last: Int): [Mall!]!
+  name: String
+  updated_at: DateTime!
+  users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
 }
 
 type Permission {
@@ -31,6 +52,7 @@ type Post {
 
 type Query {
   drafts: [Post!]!
+  partners: [Partner!]
   permissions(code: String, name: String): [Permission!]
   posts: Post!
   users: [User!]
@@ -41,7 +63,19 @@ type User {
   email: String!
   id: Int!
   nickname: String
+  partner: Partner!
   password: String!
   permissions: [Permission!]!
   updated_at: DateTime!
+}
+
+input UserUpdateInput {
+  email: String!
+  nickname: String
+  password: String!
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: Int
 }
