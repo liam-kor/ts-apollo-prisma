@@ -22,9 +22,11 @@ input MallWhereUniqueInput {
 
 type Mutation {
   createDraft(body: String!, title: String!): Post!
+  createPartner(partner: PartnerCreateInput): Partner!
   publish(draftId: Int!): Post!
   signIn(email: String!, password: String!): AuthPayload!
-  signUp(email: String!, password: String!): User!
+  signUp(email: String!, partner_id: Int!, password: String!): User!
+  updateUser(user: UserUpdateInput): User!
 }
 
 type Partner {
@@ -35,6 +37,14 @@ type Partner {
   name: String
   updated_at: DateTime!
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
+}
+
+input PartnerCreateInput {
+  code: String
+  email: String!
+  name: String!
+  nickname: String
+  password: String!
 }
 
 type Permission {
@@ -72,7 +82,6 @@ type User {
 input UserUpdateInput {
   email: String!
   nickname: String
-  password: String!
 }
 
 input UserWhereUniqueInput {
