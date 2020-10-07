@@ -1,13 +1,4 @@
 import { rule, shield } from 'graphql-shield';
-import { Context } from '../../context';
-import { verify } from 'jsonwebtoken';
-import { getUserId } from '../utils';
-
-export const APP_SECRET = 'lunasoft';
-
-interface Token {
-  userId: string;
-}
 
 const rules = {
     isAuthenticatedUser: rule()((parent, args, context) => {

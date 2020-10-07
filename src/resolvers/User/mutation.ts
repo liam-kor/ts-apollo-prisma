@@ -1,8 +1,6 @@
 import { inputObjectType, intArg, mutationField, stringArg } from '@nexus/schema';
 import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import { getUserId } from '../../middlewares/utils'
-
 
 export const signUp = mutationField('signUp', {
     type: 'User',
