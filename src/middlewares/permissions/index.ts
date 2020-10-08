@@ -1,13 +1,20 @@
-import { rule, shield } from 'graphql-shield';
+import { rule, shield, and, or, not } from 'graphql-shield';
 
 const rules = {
     isAuthenticatedUser: rule()((parent, args, context) => {
-        if (context.user_id) {
+        if (context.user) {
             return true
         } else {
             return false
         }
     }),
+    isAdminUser: rule()((parent, args, context) => {
+        if (context.user.is_admin) {
+            return true
+        } else {
+            return false
+        }
+    })
 //   isPostOwner: rule()(async (parent, { id }, context) => {
 //     const userId = getUserId(context);
 //     const author = await context.prisma.post
@@ -24,14 +31,9 @@ const rules = {
 export const permissions = shield({
     Query: {
         users: rules.isAuthenticatedUser,
-        // filterPosts: rules.isAuthenticatedUser,
-        // post: rules.isAuthenticatedUser,
     },
     Mutation: {
-        // createPartner: rules.isAuthenticatedUser,
-        // createDraft: rules.isAuthenticatedUser,
-        // deletePost: rules.isPostOwner,
-        // publish: rules.isPostOwner,
+        createUser: and(rules.isAuthenticatedUser, rules.isAdminUser),
     },  
 }, {
     allowExternalErrors: true

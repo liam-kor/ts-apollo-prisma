@@ -1,8 +1,9 @@
 import { inputObjectType, intArg, mutationField, stringArg } from '@nexus/schema';
+import { ApolloError } from 'apollo-server-express'
 import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-export const signUp = mutationField('signUp', {
+export const createUser = mutationField('createUser', {
     type: 'User',
     nullable: false,
     args: {
@@ -13,7 +14,7 @@ export const signUp = mutationField('signUp', {
     resolve: async (_root, {email, password, partner_id}, ctx) => {
         const exists = await ctx.prisma.user.findMany({ where: { email: email }})
         if (exists.length > 0) {
-            throw Error("중복되는 이메일 입니다.")
+            throw new ApolloError("Duplicated email address", "DUPLICATED_EMAIL")
         }
 
         const cryptedPassword = await hash(password, 10)
@@ -46,7 +47,12 @@ export const signIn = mutationField('signIn', {
         })
 
         if (!user) {
-            throw new Error('No User exists')
+            throw new ApolloError('No User exists', 'NON_EXISTENT_USER')
+        }
+
+        const passwordValid = await compare(password, user.password);
+        if (!passwordValid) {
+          throw new ApolloError('Invalid password', 'INVALID_PASSWORD');
         }
 
         return {
@@ -75,12 +81,6 @@ export const updateUser = mutationField('updateUser', {
         const current_user = await ctx.prisma.user.findOne({where: { id: ctx.user_id}})
         if (!current_user) {
             throw new Error('No User exists')
-        }
-        console.log(current_user)
-        const passwordValid = await compare(user.password, current_user.password)
-
-        if (!passwordValid) {
-            throw new Error('Invalid password')
         }
 
         return ctx.prisma.user.update({

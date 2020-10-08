@@ -7,6 +7,7 @@ export const User = objectType({
         t.model.email()
         t.model.password()
         t.model.nickname()
+        t.model.is_admin()
         t.model.partner()
         t.model.created_at()
         t.model.updated_at()

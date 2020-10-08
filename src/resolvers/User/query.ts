@@ -5,6 +5,7 @@ export const users = queryField('users', {
     type: 'User',
     list: true,
     resolve(_root, _args, ctx) {
-        return ctx.prisma.user.findMany( { where: { } } )
+        console.log(ctx.user)
+        return ctx.prisma.user.findMany()
     }
 })
