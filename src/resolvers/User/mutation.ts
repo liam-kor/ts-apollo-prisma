@@ -14,9 +14,8 @@ export const createUser = mutationField('createUser', {
   args: {
     email: stringArg({ required: true }),
     password: stringArg({ required: true }),
-    partner_id: intArg({ required: true }),
   },
-  resolve: async (_root, { email, password, partner_id }, ctx) => {
+  resolve: async (_root, { email, password }, ctx) => {
     const exists = await ctx.prisma.user.findMany({ where: { email: email } });
     if (exists.length > 0) {
       throw new DuplicatedEmail();
@@ -28,7 +27,7 @@ export const createUser = mutationField('createUser', {
       email: email,
       password: cryptedPassword,
       partner: {
-        connect: { id: partner_id },
+        connect: { id: ctx.user.partner_id },
       },
     };
 
@@ -87,7 +86,7 @@ export const updateUser = mutationField('updateUser', {
       where: { id: ctx.user.id },
     });
     if (!current_user) {
-      throw new Error('No User exists');
+      throw new NoUserExists();
     }
 
     return ctx.prisma.user.update({
