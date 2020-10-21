@@ -10,13 +10,18 @@ interface Token {
   userId: string;
 }
 
+type User = {
+  id: number;
+  partner_id: number;
+};
+
 export interface Context {
   request: {
     req: express.Request;
   };
   prisma: PrismaClient;
-  appSecret: String;
-  user_id: String;
+  appSecret: string;
+  user: User;
 }
 
 function getUserId(request: { req: express.Request }): string {

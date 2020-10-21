@@ -1,4 +1,3 @@
-export * from './Post'
-export * from './User'
-export * from './Permission'
-export * from './Partner'
+export * from './User';
+export * from './Permission';
+export * from './Partner';

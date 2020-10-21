@@ -11,8 +11,8 @@ export const schema = makeSchema({
   },
   plugins: [nexusSchemaPrisma()],
   outputs: {
-    typegen: join(__dirname, '..', 'generated/nexus.ts'),
-    schema: join(__dirname, '..', 'schema.graphql'),
+    typegen: join(__dirname, './generated/nexus.ts'),
+    schema: join(__dirname, './../schema.graphql'),
   },
   typegenAutoConfig: {
     sources: [

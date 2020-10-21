@@ -1,8 +1,8 @@
 import { ApolloServer } from 'apollo-server-express';
 import { applyMiddleware } from 'graphql-middleware';
 import express from 'express';
-import depthLimit from 'graphql-depth-limit';
-import compression from 'compression';
+// import depthLimit from 'graphql-depth-limit';
+// import compression from 'compression';
 import cors from 'cors';
 import { schema } from './schema';
 import { permissions } from './middlewares/permissions';
@@ -13,12 +13,12 @@ const schemaWithMiddleware = applyMiddleware(schema, permissions);
 const server = new ApolloServer({
   schema: schemaWithMiddleware,
   context: createContext,
-  validationRules: [depthLimit(7)],
+  // validationRules: [depthLimit(7)],
 });
 
 const app = express();
 app.use('*', cors());
-app.use(compression());
+// app.use(compression());
 app.use(function (req, res, next) {
   console.log('Time:', Date.now());
   next();
